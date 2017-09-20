@@ -1,14 +1,24 @@
-analytics = require("analytics-node")
-_ = require("underscore")._
+var _, analytics;
 
-module.exports = (config = {}) ->
-  (req, res, next) ->
-    req.track = (event, properties = {}) ->
-      
-    next()
-  req.analytics = {}
-  
-  req.analytics.userId = req.currentUser._id if req.currentUser
-  
-  next()
-    
+analytics = require("analytics-node");
+
+_ = require("underscore")._;
+
+module.exports = function(config) {
+  if (config == null) {
+    config = {};
+  }
+  (function(req, res, next) {
+    req.track = function(event, properties) {
+      if (properties == null) {
+        properties = {};
+      }
+    };
+    return next();
+  });
+  req.analytics = {};
+  if (req.currentUser) {
+    req.analytics.userId = req.currentUser._id;
+  }
+  return next();
+};
