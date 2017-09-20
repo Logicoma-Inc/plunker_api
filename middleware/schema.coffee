@@ -1,10 +1,23 @@
-_ = require("underscore")._
-apiErrors = require("../errors")
+var _, apiErrors;
 
-module.exports = (schema) ->
-  (req, res, next) ->
-    schema = schema(req) if _.isFunction(schema)
-    schema.validate req.body, (err, json) ->
-      console.log "[INFO] Invalid schema", err if err
-      if err then next(new apiErrors.InvalidBody(err))
-      else next()
+_ = require("underscore")._;
+
+apiErrors = require("../errors");
+
+module.exports = function(schema) {
+  return function(req, res, next) {
+    if (_.isFunction(schema)) {
+      schema = schema(req);
+    }
+    return schema.validate(req.body, function(err, json) {
+      if (err) {
+        console.log("[INFO] Invalid schema", err);
+      }
+      if (err) {
+        return next(new apiErrors.InvalidBody(err));
+      } else {
+        return next();
+      }
+    });
+  };
+};
