@@ -1,6 +1,4 @@
-require('coffee-script');
-
-var App = require('./app.coffee');
+var App = require('./app.js');
 var Nconf = require('nconf');
 
 App.listen(Nconf.get('PORT'), function(err) {
